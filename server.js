@@ -1,11 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const items = require('./routes/api/items');
-const Path = require('path');
+const path = require('path'); // lowercase 'path' is the convention
 const app = express();
 
 // Middleware
-app.use(express.json()); // Important for req.body parsing, replaces body-parser
+app.use(express.json()); // Parses incoming JSON requests
 
 // DB Config
 const db = require('./config/keys').mongoURI;
@@ -17,20 +17,19 @@ mongoose
   .then(() => console.log('MongoDB Connected...'))
   .catch(err => console.error('Mongo Error:', err));
 
-// Use Routes
-app.use('/api/items', items); // Mount item routes
+// API Routes
+app.use('/api/items', items);
 
 // Serve static assets if in production
-if(process.env.NODE_ENV === 'production'){ 
-    // /Set static folder
-    app.use(express.static('client/build'));
+if (process.env.NODE_ENV === 'production') {
+  // Absolute path to client/build
+  const buildPath = path.join(__dirname, 'client', 'build');
+  app.use(express.static(buildPath));
 
-    app.get('/*', (req, res) => {
-         res.sendFile(Path.resolve(__dirname, 'client', 'build', 'index.html'));    
-    });
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(buildPath, 'index.html'));
+  });
 }
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server started on port ${port}`));
-
-
