@@ -31,5 +31,11 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+// Health check route
+app.get('/health', (req, res) => {
+  res.status(200).send('Server is healthy!');
+});
+
+// Port configuration
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server started on port ${port}`));
