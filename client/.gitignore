@@ -1,23 +1,73 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
-/.pnp
+# ----------------------
+# 📦 DEPENDENCIES
+# ----------------------
+node_modules/
+.pnp/
 .pnp.js
+/client/node_modules/
+/server/node_modules/
 
-# testing
-/coverage
+# ----------------------
+# 🧪 TESTING
+# ----------------------
+coverage/
+__snapshots__/
+jest-test-results.json
 
-# production
-/build
+# ----------------------
+# 🚀 PRODUCTION BUILDS
+# ----------------------
+build/
+dist/
+client/build/
+client/dist/
 
-# misc
-.DS_Store
+# ----------------------
+# 🔐 ENVIRONMENT FILES
+# ----------------------
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.env.docker
 
+# ----------------------
+# 🧭 RENDER CONFIG
+# ----------------------
+render.yaml
+docker-compose.override.yml
+
+# ----------------------
+# 🗂 IDE / SYSTEM FILES
+# ----------------------
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.swp
+.DS_Store
+Thumbs.db
+
+# ----------------------
+# 📋 LOGS & TEMP FILES
+# ----------------------
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.pid
+*.seed
+logs/
+
+# ----------------------
+# 🧱 MONGODB DUMPS
+# ----------------------
+dump/
+*.dump
+
+# ----------------------
+# 🧩 OPTIONAL TOOLING
+# ----------------------
+.next/
+*.tsbuildinfo
