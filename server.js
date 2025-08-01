@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const items = require('./routes/api/items');
-const path = require('path'); // lowercase 'path' is the convention
+const path = require('path');
 const app = express();
 
 // Middleware
@@ -22,19 +22,24 @@ app.use('/api/items', items);
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {
-  // Absolute path to client/build
   const buildPath = path.join(__dirname, 'client', 'build');
   app.use(express.static(buildPath));
 
+  // ✅ Health route BEFORE catch-all
+  app.get('/health', (req, res) => {
+    res.status(200).send('Server is healthy!');
+  });
+
+  // Catch-all: Send React's index.html for all unknown routes
   app.get('*', (req, res) => {
     res.sendFile(path.join(buildPath, 'index.html'));
   });
+} else {
+  // Health route also available in dev mode
+  app.get('/health', (req, res) => {
+    res.status(200).send('Server is healthy!');
+  });
 }
-
-// Health check route
-app.get('/health', (req, res) => {
-  res.status(200).send('Server is healthy!');
-});
 
 // Port configuration
 const port = process.env.PORT || 5000;
