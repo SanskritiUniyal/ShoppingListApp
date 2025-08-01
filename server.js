@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === 'production') {
 
   // Catch-all: Send React's index.html for all unknown routes
   app.get('*', (req, res) => {
-    res.sendFile(path.join(buildPath, 'index.html'));
+    res.sendFile(path.resolve(buildPath, 'index.html'));
   });
 } else {
   // Health route also available in dev mode
