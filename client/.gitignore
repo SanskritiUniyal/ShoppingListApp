@@ -17,9 +17,8 @@ jest-test-results.json
 # ----------------------
 # 🚀 PRODUCTION BUILDS
 # ----------------------
-build/
-dist/
 client/build/
+dist/
 client/dist/
 
 # ----------------------

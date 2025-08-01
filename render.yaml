@@ -3,8 +3,11 @@ services:
     name: shoppinglist-app
     env: node
     plan: free
-    buildCommand: npm install --prefix client && npm run build --prefix client && npm install
+    buildCommand: cd client && npm install && npm run build && cd .. && npm install
     startCommand: node server.js
     envVars:
       - key: MONGO_URI
+        sync: false
+      - key: NODE_ENV
+        value: production
         sync: false
