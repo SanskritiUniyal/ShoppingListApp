@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Shopping List built with the MERN stack",
   "main": "server.js",
-  
   "scripts": {
     "client-install": "npm install --prefix client",
     "build": "npm run client-install && npm run build --prefix client",
@@ -12,20 +11,18 @@
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
-
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=8.0.0"
   },
-
   "author": "Sanskriti Uniyal",
   "license": "ISC",
-
   "dependencies": {
-    "body-parser": "^2.2.0",
+    "bcryptjs": "^3.0.2",
     "concurrently": "^9.2.0",
     "dotenv": "^17.2.1",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.17.0",
     "mongoose": "^8.16.5",
     "webpack-dev-server": "^5.2.2"

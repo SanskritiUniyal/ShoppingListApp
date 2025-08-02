@@ -1,46 +1,41 @@
+//  Load environment variables first!
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
-const items = require('./routes/api/items');
 const path = require('path');
+
 const app = express();
 
 // Middleware
-app.use(express.json()); // Parses incoming JSON requests
+app.use(express.json());
 
-// DB Config
-const db = require('./config/keys').mongoURI;
-console.log("Loaded URI:", db);
+//  MongoDB Connection
+const mongoURI = process.env.MONGO_URI || require('./config/keys').mongoURI;
 
-// Connect to MongoDB
 mongoose
-  .connect(db)
-  .then(() => console.log('MongoDB Connected...'))
-  .catch(err => console.error('Mongo Error:', err));
+  .connect(mongoURI)
+  .then(() => console.log(' MongoDB Connected'))
+  .catch(err => console.error(' MongoDB Connection Error:', err));
 
-// API Routes
-app.use('/api/items', items);
+//  API Routes
+app.use('/api/items', require('./routes/api/items'));
 
-// Serve static assets if in production
+//  Health Check (always available)
+app.get('/health', (req, res) => {
+  res.status(200).send('Server is healthy!');
+});
+
+//  Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
-  const buildPath = path.join(__dirname, 'client', 'build');
+  const buildPath = path.resolve(__dirname, 'client', 'build');
   app.use(express.static(buildPath));
 
-  // ✅ Health route BEFORE catch-all
-  app.get('/health', (req, res) => {
-    res.status(200).send('Server is healthy!');
-  });
-
-  // Catch-all: Send React's index.html for all unknown routes
   app.get('*', (req, res) => {
-    res.sendFile(path.resolve(buildPath, 'index.html'));
-  });
-} else {
-  // Health route also available in dev mode
-  app.get('/health', (req, res) => {
-    res.status(200).send('Server is healthy!');
+    res.sendFile(path.join(buildPath, 'index.html'));
   });
 }
 
-// Port configuration
-const port = process.env.PORT || 5000;
-app.listen(port, () => console.log(`Server started on port ${port}`));
+//  Start Server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(` Server running on port ${PORT}`));
