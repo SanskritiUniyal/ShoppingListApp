@@ -25,6 +25,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.17.0",
     "mongoose": "^8.16.5",
+    "react-toastify": "^11.0.5",
     "webpack-dev-server": "^5.2.2"
   },
   "devDependencies": {

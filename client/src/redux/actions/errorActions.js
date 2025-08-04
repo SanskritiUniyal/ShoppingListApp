@@ -1,4 +1,4 @@
-import { SET_ERROR, CLEAR_ERROR } from '../types/errorTypes';
+import { SET_ERROR, CLEAR_ERROR } from '../types';
 
 export const setError = (message) => ({
   type: SET_ERROR,

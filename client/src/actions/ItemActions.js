@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_ITEMS, DELETE_ITEM, ADD_ITEM, ITEMS_LOADING } from './types';
+import { GET_ITEMS, DELETE_ITEM, ADD_ITEM, ITEMS_LOADING } from '../redux/actions/types';
 
 export const getItems = () => dispatch => {
   dispatch(setItemsLoading());

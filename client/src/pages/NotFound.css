@@ -1,0 +1,40 @@
+.not-found-serenity {
+  background: linear-gradient(to bottom right, #e6f7ef, #cce3dc);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
+  padding: 2rem;
+}
+
+.not-found-serenity h1 {
+  font-size: 6rem;
+  color: #4CAF50;
+  margin-bottom: 1rem;
+}
+
+.not-found-serenity h2 {
+  font-size: 3rem;
+  color: #3cb27f;
+  margin-bottom: 0.5rem;
+}
+
+.not-found-serenity p {
+  font-size: 1.8rem;
+  color: #555;
+}
+
+.home-link {
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  color: #007bfc;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.home-link:hover {
+  text-decoration: underline;
+}

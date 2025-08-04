@@ -1,20 +1,67 @@
+.App {
+  font-family: Arial, sans-serif;
+  padding: 2rem;
+  background-color: #f7f7f7;
+}
+
+.form-container {
+  background-color: white;
+  padding: 2rem;
+  max-width: 400px;
+  margin: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+input {
+  display: block;
+  margin-bottom: 1rem;
+  width: 100%;
+  padding: 0.5rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  background-color: #28688a;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #204b76;
+}
+
 .remove-btn {
   margin-right: 0.5rem;
 }
 
 .fade-enter {
- opacity: 0.01;
+  opacity: 0.01;
 }
-
-.fade-enter-active{
- opacity: 1;
- transition: opacity 300ms ease-in;
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in;
 }
-.fade-exit{
+.fade-exit {
   opacity: 1;
 }
-
 .fade-exit-active {
- opacity: 0.01;
- transition: opacity 300ms ease-in;
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+.error-text {
+  color: red;
+  margin-bottom: 1rem;
+}
+
+.navbar-welcome {
+  font-weight: bold;
+  margin-left: 0.5rem;
+  color: #328698;
+}
+
+h2 {
+  color: #0b2a4d;
+  font-weight: 600;
 }
