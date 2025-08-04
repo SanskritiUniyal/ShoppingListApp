@@ -1,5 +1,4 @@
 const express = require('express');
-const router = express.Router();
 const bcrypt = require('bcryptjs');
 const User = require('../../models/User');
 const {
@@ -10,24 +9,27 @@ const {
   verifyToken
 } = require('../../middleware/auth');
 
-//  Register New User – Public
+const router = express.Router();
+
+// Register - PUBLIC
 router.post('/', validateRegistration, async (req, res) => {
   const { name, email, password } = req.body;
-
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ msg: 'User already enrolled. Please sign in.' });
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt(10));
 
     const newUser = new User({ name, email, password: hashedPassword });
     const savedUser = await newUser.save();
 
     const token = generateAccessToken(savedUser);
+    const refreshToken = generateRefreshToken(savedUser);
 
     res.json({
-      token,
+      msg: 'Registration successful',
+      accessToken: token,
+      refreshToken,
       user: {
         id: savedUser._id,
         name: savedUser.name,
@@ -40,10 +42,9 @@ router.post('/', validateRegistration, async (req, res) => {
   }
 });
 
-//  Login – Public
+// Login -  PUBLIC
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ msg: 'User not found.' });
@@ -55,7 +56,7 @@ router.post('/login', async (req, res) => {
     const refreshToken = generateRefreshToken(user);
 
     res.json({
-      msg: 'Login successful.',
+      msg: 'Login successful',
       accessToken,
       refreshToken,
       user: { id: user._id, name: user.name }
@@ -65,22 +66,21 @@ router.post('/login', async (req, res) => {
   }
 });
 
-//  Refresh Access Token – Public
+// Refresh ACCESS TOKEN
 router.post('/refresh', refreshAccessToken);
 
-//  Get Current User Info – Private
+// Me - CURRENT USER INFO
 router.get('/me', verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
     if (!user) return res.status(404).json({ msg: 'User not found.' });
-
     res.json(user);
   } catch (err) {
     res.status(500).json({ msg: 'Error fetching user.' });
   }
 });
 
-// Delete Account – Private
+// Delete - PRIVATE
 router.delete('/me', verifyToken, async (req, res) => {
   try {
     await User.findByIdAndDelete(req.user.id);

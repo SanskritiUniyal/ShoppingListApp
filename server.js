@@ -1,41 +1,39 @@
-//  Load environment variables first!
 require('dotenv').config();
-
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const cors = require('cors');
+
 
 const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(cors());
 
-//  MongoDB Connection
+// MongoDB Connection
 const mongoURI = process.env.MONGO_URI || require('./config/keys').mongoURI;
-
 mongoose
   .connect(mongoURI)
-  .then(() => console.log(' MongoDB Connected'))
-  .catch(err => console.error(' MongoDB Connection Error:', err));
+  .then(() => console.log('MongoDB Connected...'))
+  .catch(err => console.error('MongoDB Connection Error:', err));
 
-//  API Routes
+// Routes
 app.use('/api/items', require('./routes/api/items'));
+app.use('/api/users', require('./routes/api/users'));
 
-//  Health Check (always available)
-app.get('/health', (req, res) => {
-  res.status(200).send('Server is healthy!');
-});
+// Health Check
+app.get('/health', (req, res) => res.status(200).send('Server is healthy!'));
 
-//  Serve static assets in production
+// Serve React App in Production
 if (process.env.NODE_ENV === 'production') {
-  const buildPath = path.resolve(__dirname, 'client', 'build');
-  app.use(express.static(buildPath));
+  const clientBuildPath = path.join(__dirname, 'client', 'build');
+  app.use(express.static(clientBuildPath));
 
   app.get('*', (req, res) => {
-    res.sendFile(path.join(buildPath, 'index.html'));
+    res.sendFile(path.resolve(clientBuildPath, 'index.html'));
   });
 }
 
-//  Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(` Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
