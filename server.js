@@ -9,7 +9,10 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: ['https://shoppinglistapp-yzrv.onrender.com'], // client URL
+  credentials: true
+}));
 
 // MongoDB Connection
 const mongoURI = process.env.MONGO_URI || require('./config/keys').mongoURI;

@@ -90,4 +90,20 @@ router.delete('/me', verifyToken, async (req, res) => {
   }
 });
 
+
+const User = require('../../models/User');
+const { verifyToken } = require('../../middleware/auth');
+
+// GET /api/users/profile – returns user info after login
+router.get('/profile', verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) return res.status(404).json({ msg: 'User not found.' });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ msg: 'Error fetching profile.' });
+  }
+});
+
+
 module.exports = router;

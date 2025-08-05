@@ -1,58 +1,43 @@
-import axios from 'axios';
+// src/redux/actions/ItemActions.js
 import {
   GET_ITEMS,
   ADD_ITEM,
   DELETE_ITEM,
-  ITEMS_LOADING
+  ITEM_ERROR
 } from './types';
+import api from '../../utils/axiosInstance';
+import { toast } from 'react-toastify';
 
-// GET ITEMS VIA JWT TOKEN
-export const getItems = () => async (dispatch, getState) => {
-  dispatch(setItemsLoading());
-
-  const token = getState().auth.accessToken;
-
+export const getItems = () => async dispatch => {
   try {
-    const res = await axios.get('/api/items', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    const res = await api.get('/items');
     dispatch({ type: GET_ITEMS, payload: res.data });
   } catch (err) {
     console.error('GET items error:', err.response?.data?.msg || err.message);
+    dispatch({ type: ITEM_ERROR });
   }
 };
 
-// POST/ADD ITEMS VIA JWT TOKEN
-export const addItem = (item) => async (dispatch, getState) => {
-  const token = getState().auth.accessToken;
-
+export const addItem = (itemData) => async dispatch => {
   try {
-    const res = await axios.post('/api/items', item, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    const res = await api.post('/items', itemData);
     dispatch({ type: ADD_ITEM, payload: res.data });
+    toast.success('Item added!');
   } catch (err) {
     console.error('ADD item error:', err.response?.data?.msg || err.message);
+    toast.error(err.response?.data?.msg || 'Failed to add item');
+    dispatch({ type: ITEM_ERROR });
   }
 };
- // DELETE ITEMS VIA JWT TOKEN
-export const deleteItem = (id) => async (dispatch, getState) => {
-  const token = getState().auth.accessToken;
 
+export const deleteItem = (id) => async dispatch => {
   try {
-    await axios.delete(`/api/items/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    await api.delete(`/items/${id}`);
     dispatch({ type: DELETE_ITEM, payload: id });
+    toast.success('Item deleted!');
   } catch (err) {
     console.error('DELETE item error:', err.response?.data?.msg || err.message);
+    toast.error(err.response?.data?.msg || 'Failed to delete item');
+    dispatch({ type: ITEM_ERROR });
   }
 };
-
-export const setItemsLoading = () => ({ type: ITEMS_LOADING });

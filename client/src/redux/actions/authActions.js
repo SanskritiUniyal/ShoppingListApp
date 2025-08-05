@@ -1,10 +1,11 @@
-import axios from 'axios';
+import api from '../utils/axiosInstance';
 import {
   REGISTER_SUCCESS,
   LOGIN_SUCCESS,
   LOGOUT,
   REFRESH_TOKEN,
-  AUTH_ERROR
+  AUTH_ERROR,
+  USER_LOADED
 } from '../types';
 import { setError, clearError } from './errorActions';
 import { toast } from 'react-toastify';
@@ -12,33 +13,23 @@ import { toast } from 'react-toastify';
 const API = '/api/users';
 
 export const loadUser = () => async (dispatch) => {
-  const accessToken = localStorage.getItem('accessToken');
-  if (accessToken) {
-    try {
-      const res = await axios.get('/api/users/profile', {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      });
-      dispatch({
-        type: USER_LOADED,
-        payload: {
-          accessToken,
-          user: res.data
-        }
-      });
-    } catch (err) {
-      dispatch({ type: AUTH_ERROR });
-    }
-  } else {
+  try {
+    const res = await api.get(`${API}/profile`);
+    dispatch({
+      type: USER_LOADED,
+      payload: {
+        accessToken: localStorage.getItem('accessToken'),
+        user: res.data
+      }
+    });
+  } catch (err) {
     dispatch({ type: AUTH_ERROR });
   }
 };
 
-
 export const registerUser = (formData) => async (dispatch) => {
   try {
-    const res = await axios.post(`${API}`, formData);
+    const res = await api.post(API, formData);
     dispatch({
       type: REGISTER_SUCCESS,
       payload: {
@@ -58,7 +49,7 @@ export const registerUser = (formData) => async (dispatch) => {
 
 export const loginUser = (formData) => async (dispatch) => {
   try {
-    const res = await axios.post(`${API}/login`, formData);
+    const res = await api.post(`${API}/login`, formData);
     dispatch({
       type: LOGIN_SUCCESS,
       payload: {
@@ -78,7 +69,7 @@ export const loginUser = (formData) => async (dispatch) => {
 
 export const refreshAccess = (refreshToken) => async (dispatch) => {
   try {
-    const res = await axios.post(`${API}/refresh`, { refreshToken });
+    const res = await api.post(`${API}/refresh`, { refreshToken });
     dispatch({ type: REFRESH_TOKEN, payload: res.data.accessToken });
   } catch (err) {
     dispatch(setError('Token refresh failed'));
