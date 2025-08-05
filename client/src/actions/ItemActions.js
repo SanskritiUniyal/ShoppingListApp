@@ -1,26 +1,34 @@
 import axios from 'axios';
-import { GET_ITEMS, DELETE_ITEM, ADD_ITEM, ITEMS_LOADING } from '../redux/actions/types';
+import {
+  GET_ITEMS,
+  ADD_ITEM,
+  DELETE_ITEM,
+  ITEMS_LOADING
+} from './types';
 
-// Get Items (with JWT token)
+// GET ITEMS VIA JWT TOKEN
 export const getItems = () => async (dispatch, getState) => {
   dispatch(setItemsLoading());
+
+  const token = getState().auth.accessToken;
+
   try {
-    const token = getState().auth.accessToken;
     const res = await axios.get('/api/items', {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
     dispatch({ type: GET_ITEMS, payload: res.data });
-  } catch (error) {
-    console.error('Error fetching items:', error.response?.data?.msg || error.message);
+  } catch (err) {
+    console.error('GET items error:', err.response?.data?.msg || err.message);
   }
 };
 
-// Add Item (with JWT token)
+// POST/ADD ITEMS VIA JWT TOKEN
 export const addItem = (item) => async (dispatch, getState) => {
+  const token = getState().auth.accessToken;
+
   try {
-    const token = getState().auth.accessToken;
     const res = await axios.post('/api/items', item, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -28,14 +36,14 @@ export const addItem = (item) => async (dispatch, getState) => {
     });
     dispatch({ type: ADD_ITEM, payload: res.data });
   } catch (err) {
-    console.error('POST error:', err.response?.data?.msg || err.message);
+    console.error('ADD item error:', err.response?.data?.msg || err.message);
   }
 };
-
-// Delete Item (with JWT token)
+ // DELETE ITEMS VIA JWT TOKEN
 export const deleteItem = (id) => async (dispatch, getState) => {
+  const token = getState().auth.accessToken;
+
   try {
-    const token = getState().auth.accessToken;
     await axios.delete(`/api/items/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -43,10 +51,8 @@ export const deleteItem = (id) => async (dispatch, getState) => {
     });
     dispatch({ type: DELETE_ITEM, payload: id });
   } catch (err) {
-    console.error('DELETE error:', err.response?.data?.msg || err.message);
+    console.error('DELETE item error:', err.response?.data?.msg || err.message);
   }
 };
 
-export const setItemsLoading = () => {
-  return { type: ITEMS_LOADING };
-};
+export const setItemsLoading = () => ({ type: ITEMS_LOADING });

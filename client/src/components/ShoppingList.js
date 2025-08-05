@@ -22,14 +22,14 @@ class ShoppingList extends Component {
 
   render() {
     const { items } = this.props.item;
-    const { isAuthenticated } = this.props.auth;
+    const { isAuthenticated, user } = this.props.auth;
 
     if (!isAuthenticated) {
       return <Container><p>Please login to view your shopping list.</p></Container>;
     }
 
     if (!items || items.length === 0) {
-      return <Container><p>{user?.name}, Your shopping list is empty.</p></Container>;
+      return <Container><p>{user?.name}, your shopping list is empty.</p></Container>;
     }
 
     return (
