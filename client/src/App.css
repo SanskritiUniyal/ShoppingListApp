@@ -5,7 +5,7 @@
 }
 
 .form-container {
-  background-color: white;
+  background-color: rgb(197, 132, 132);
   padding: 2rem;
   max-width: 400px;
   margin: auto;
@@ -22,7 +22,7 @@ input {
 button {
   padding: 0.5rem 1rem;
   background-color: #28688a;
-  color: white;
+  color: rgb(199, 233, 112);
   border: none;
   cursor: pointer;
 }

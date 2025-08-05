@@ -14,7 +14,9 @@ const initialState = {
   accessToken: localStorage.getItem('accessToken'),
   isAuthenticated: null,
   isLoading: false,
-  user: null
+  user: null,
+  error: null
+  
 };
 
 export default function (state = initialState, action) {

@@ -1,3 +1,4 @@
+// src/App.js
 import React, { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Container } from 'reactstrap';
@@ -15,14 +16,13 @@ import Register from './components/auth/Register';
 import Dashboard from './components/Dashboard';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-  const accessToken = useSelector(state => state.auth.accessToken);
   const user = useSelector(state => state.auth.user);
 
-  // Load token from localStorage on app mount
   useEffect(() => {
     dispatch(loadUser());
   }, [dispatch]);
@@ -32,7 +32,7 @@ function App() {
       <AppNavbar />
       <Container>
         <Routes>
-          {/* 🏠 Home or Dashboard */}
+          {/* 🏠 Home or Shopping List */}
           <Route
             path="/"
             element={
@@ -57,26 +57,26 @@ function App() {
             element={isAuthenticated ? <Navigate to="/" /> : <Register />}
           />
 
-          {/* 🧭 Dashboard */}
+          {/* 🧭 Protected Dashboard */}
           <Route
             path="/dashboard"
             element={
-              isAuthenticated ? <Dashboard /> : <Navigate to="/login" />
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
             }
           />
 
-          {/* 🛒 User-specific shopping list */}
+          {/* 🛒 Protected Shopping Page */}
           <Route
             path="/shopping"
             element={
-              isAuthenticated ? (
+              <PrivateRoute>
                 <>
                   <ItemModal />
                   <ShoppingList userId={user?._id} />
                 </>
-              ) : (
-                <Navigate to="/login" />
-              )
+              </PrivateRoute>
             }
           />
 
