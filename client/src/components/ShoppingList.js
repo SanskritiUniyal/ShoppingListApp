@@ -29,7 +29,7 @@ class ShoppingList extends Component {
     }
 
     if (!items || items.length === 0) {
-      return <Container><p>Your shopping list is empty.</p></Container>;
+      return <Container><p>{user?.name}, Your shopping list is empty.</p></Container>;
     }
 
     return (

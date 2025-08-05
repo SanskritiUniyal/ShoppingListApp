@@ -11,6 +11,31 @@ import { toast } from 'react-toastify';
 
 const API = '/api/users';
 
+export const loadUser = () => async (dispatch) => {
+  const accessToken = localStorage.getItem('accessToken');
+  if (accessToken) {
+    try {
+      const res = await axios.get('/api/users/profile', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+      dispatch({
+        type: USER_LOADED,
+        payload: {
+          accessToken,
+          user: res.data
+        }
+      });
+    } catch (err) {
+      dispatch({ type: AUTH_ERROR });
+    }
+  } else {
+    dispatch({ type: AUTH_ERROR });
+  }
+};
+
+
 export const registerUser = (formData) => async (dispatch) => {
   try {
     const res = await axios.post(`${API}`, formData);
