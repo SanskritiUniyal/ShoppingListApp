@@ -2,13 +2,15 @@ import React, { Component, createRef } from 'react';
 import { Container, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { connect } from 'react-redux';
-import { getItems, deleteItem } from '../actions/ItemActions';
+import { getItems, deleteItem } from '../redux/actions/ItemActions';
 
 class ShoppingList extends Component {
   nodeRefs = {};
 
   componentDidMount() {
-    this.props.getItems();
+    if (this.props.auth?.isAuthenticated) {
+      this.props.getItems();
+    }
   }
 
   getNodeRef = id => {
@@ -20,6 +22,11 @@ class ShoppingList extends Component {
 
   render() {
     const { items } = this.props.item;
+    const { isAuthenticated } = this.props.auth;
+
+    if (!isAuthenticated) {
+      return <Container><p>Please login to view your shopping list.</p></Container>;
+    }
 
     if (!items || items.length === 0) {
       return <Container><p>Your shopping list is empty.</p></Container>;
@@ -53,5 +60,9 @@ class ShoppingList extends Component {
   }
 }
 
-const mapStateToProps = state => ({ item: state.item });
+const mapStateToProps = state => ({
+  item: state.item,
+  auth: state.auth
+});
+
 export default connect(mapStateToProps, { getItems, deleteItem })(ShoppingList);
