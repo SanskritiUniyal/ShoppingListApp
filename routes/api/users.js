@@ -91,7 +91,6 @@ router.delete('/me', verifyToken, async (req, res) => {
 });
 
 
-const User = require('../../models/User');
 const { verifyToken } = require('../../middleware/auth');
 
 // GET /api/users/profile – returns user info after login
