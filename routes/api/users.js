@@ -11,7 +11,7 @@ const {
 
 const router = express.Router();
 
-// Register - PUBLIC
+// 📋 Register - PUBLIC
 router.post('/', validateRegistration, async (req, res) => {
   const { name, email, password } = req.body;
   try {
@@ -19,7 +19,6 @@ router.post('/', validateRegistration, async (req, res) => {
     if (existingUser) return res.status(400).json({ msg: 'User already enrolled. Please sign in.' });
 
     const hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt(10));
-
     const newUser = new User({ name, email, password: hashedPassword });
     const savedUser = await newUser.save();
 
@@ -42,7 +41,7 @@ router.post('/', validateRegistration, async (req, res) => {
   }
 });
 
-// Login -  PUBLIC
+// 🔑 Login - PUBLIC
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -66,10 +65,10 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Refresh ACCESS TOKEN
+// 🔄 Refresh Access Token
 router.post('/refresh', refreshAccessToken);
 
-// Me - CURRENT USER INFO
+// 👤 Get Current User Info
 router.get('/me', verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
@@ -80,7 +79,7 @@ router.get('/me', verifyToken, async (req, res) => {
   }
 });
 
-// Delete - PRIVATE
+// 🗑 Delete Current User
 router.delete('/me', verifyToken, async (req, res) => {
   try {
     await User.findByIdAndDelete(req.user.id);
@@ -90,10 +89,7 @@ router.delete('/me', verifyToken, async (req, res) => {
   }
 });
 
-
-const { verifyToken } = require('../../middleware/auth');
-
-// GET /api/users/profile – returns user info after login
+// 🌟 /api/users/profile – Used for Redux hydration
 router.get('/profile', verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
@@ -103,6 +99,5 @@ router.get('/profile', verifyToken, async (req, res) => {
     res.status(500).json({ msg: 'Error fetching profile.' });
   }
 });
-
 
 module.exports = router;
